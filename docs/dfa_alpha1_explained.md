@@ -170,7 +170,7 @@ The relationship between heart rate and alpha1 during exercise follows a sigmoid
 alpha(x) = alphaMin + (alphaMax − alphaMin) / (1 + exp(k × (x − xMid)))
 ```
 
-where `x` is heart rate (or power), `xMid` is the inflection point (your threshold), `k` controls the steepness of the transition, and `alphaMin`/`alphaMax` are the floor and ceiling. The parameters are optimised with a Levenberg-Marquardt nonlinear least-squares solver — the same algorithm used in scientific curve-fitting software. Once you have the fitted sigmoid, finding VT1 is just inverting the function at alpha = 0.75 (or your personal threshold), and VT2 at alpha = 0.50:
+where `x` is heart rate (or power), `xMid` is the inflection point (your threshold), `k` controls the steepness of the transition, and `alphaMin`/`alphaMax` are the floor and ceiling. The parameters are optimised with a Levenberg-Marquardt nonlinear least-squares solver — the same algorithm used in scientific curve-fitting software. Once you have the fitted sigmoid, finding your thresholds is just inverting the function at your personal alpha values — not the textbook 0.75 and 0.50, but whatever AlphaZone has learned for you across sessions (my VT1 sits around alpha = 0.78-0.80, for instance):
 
 ```
 VT1_hr = xMid + (1/k) × ln((alphaMax − alphaMin) / (threshold − alphaMin) − 1)
