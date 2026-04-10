@@ -160,7 +160,67 @@ For the technically curious: it's all Swift and SwiftUI, running entirely on-dev
 
 The pipeline is 75+ modules — and the actual DFA math is maybe 5% of that. The other 95% is everything DFA papers don't have to deal with: BLE connection management, RR preprocessing (ectopic detection, artefact rejection, missing-beat interpolation), the stabilisation layer, cross-session learning, drift detection, fatigue modelling, Kalman filtering, respiratory rate extraction from the RR signal, and making all of it work in under a millisecond per beat.
 
-Dual-engine DFA: a fast α₁ engine (sf=1, scales 4-16, 200 beats) for VT1 detection and a deep α₂ engine (sf=5, scales 5-64, up to 1280 beats) for autonomic tracking. Quadratic detrending, median-over-scales stabilisation. A Levenberg-Marquardt solver for fitting sigmoid curves to the HR-alpha relationship across sessions. The DFA computation itself went through an optimisation from O(n^2) to O(n), which was necessary because the original version took 17 minutes to process a 90-minute ride. Now it's real-time.
+Dual-engine DFA: a fast α₁ engine (sf=1, scales 4-16, 200 beats) for VT1 detection and a deep α₂ engine (sf=5, scales 5-64, up to 1280 beats) for autonomic tracking. Quadratic detrending, median-over-scales stabilisation. The DFA computation itself went through an optimisation from O(n^2) to O(n), which was necessary because the original version took 17 minutes to process a 90-minute ride. Now it's real-time.
+
+### The math behind threshold detection
+
+The relationship between heart rate and alpha1 during exercise follows a sigmoid curve — alpha sits high at low intensities, then drops through a steep transition zone around VT1, and flattens out at low values above VT2. AlphaZone fits this with a four-parameter logistic model:
+
+```
+alpha(x) = alphaMin + (alphaMax − alphaMin) / (1 + exp(k × (x − xMid)))
+```
+
+where `x` is heart rate (or power), `xMid` is the inflection point (your threshold), `k` controls the steepness of the transition, and `alphaMin`/`alphaMax` are the floor and ceiling. The parameters are optimised with a Levenberg-Marquardt nonlinear least-squares solver — the same algorithm used in scientific curve-fitting software. Once you have the fitted sigmoid, finding VT1 is just inverting the function at alpha = 0.75 (or your personal threshold), and VT2 at alpha = 0.50:
+
+```
+VT1_hr = xMid + (1/k) × ln((alphaMax − alphaMin) / (threshold − alphaMin) − 1)
+```
+
+If the first fit is poor (R² < 0.5), the solver tries alternative starting points — data-median centred, 75th-percentile centred — and keeps the best result. With sparse data (first few minutes of a session), only the inflection point is optimised while the other parameters come from cross-session priors. As more data arrives, all four parameters are refitted and live values are blended with the prior using R²-weighted interpolation.
+
+### Why regression, not derivatives
+
+The obvious approach for detecting when alpha "crosses a threshold" would be to compute the derivative of alpha over time and look for where the slope goes negative. The problem is noise. A single ectopic beat or a brief Bluetooth dropout creates a spike in the alpha signal that produces a massive derivative — orders of magnitude larger than the real physiological transition. You'd need heavy smoothing to make derivatives usable, and by the time you've smoothed enough, you've also smoothed away the temporal resolution that makes real-time detection valuable.
+
+AlphaZone uses regression instead. Rather than asking "is alpha falling right now?" (a derivative question), it asks "given the alpha-vs-heart-rate data collected so far, where does the sigmoid best fit?" (a regression question). Each new beat adds one more data point to the regression. Outliers from artefacts get diluted by the surrounding clean data rather than dominating a local derivative calculation. The fitted sigmoid converges on the true threshold gradually, getting more confident with more data, rather than jumping around with every noisy beat.
+
+This is also why the system can detect VT1 even during steady-state efforts where heart rate barely changes — it doesn't need alpha to be actively falling. It just needs enough data points across different intensities (from the warmup, from small fluctuations in effort) to fit the curve. A derivative-based approach would see "flat alpha, flat heart rate" and report nothing. The regression sees "these data points are consistent with a threshold at 298 watts" and reports that.
+
+### Nine methods, one answer
+
+The sigmoid fit is the flagship, but it's not the only detection method running. AlphaZone operates up to nine parallel VT1 estimators simultaneously — sigmoid (live, prior-assisted, and fused), alpha-power regression, continuous HR-alpha tracking, DFA baseline projection, interval k-means clustering, dynamic tracker, HR-bin model, steady-state probe, and cross-session Kalman. Each one approaches the problem from a slightly different angle: some work better during ramp efforts, others during steady-state, others during intervals.
+
+Every method produces a VT1 estimate, a confidence score, and a freshness timestamp. The fusion layer combines them using:
+
+```
+effectiveWeight = confidence × freshness × typeMultiplier
+```
+
+The `typeMultiplier` is a per-workout-type weighting matrix — the sigmoid method gets a high multiplier during ramp tests (where it excels) but a lower one during intervals (where the interval k-means method dominates). Steady-state efforts boost the continuous tracker and alpha-power regression. These weights are themselves adaptive — they're updated via a slow EMA based on how well each method's estimate agreed with the final consensus in previous beats.
+
+Before averaging, outliers are rejected using median absolute deviation (MAD). If one method disagrees with the others by more than 2.5× the MAD, it's excluded from the fusion. The final VT1 estimate is the weighted average of the surviving candidates, plus a small agreement bonus when multiple methods converge on the same value.
+
+This means that during a progressive warmup, you might see the sigmoid and alpha-power methods driving the estimate. Switch to steady-state riding, and the continuous tracker and steady-state probe take over. Do intervals, and the interval clustering kicks in. The user sees one number — but behind it, the system is running a parallel ensemble where each method contributes what it's good at and stays quiet when it's not.
+
+### Turning alpha into a training load
+
+Alpha1 tells you whether you're above or below threshold. But for training load tracking, you need something more: a measure of *how much* physiological stress each minute of exercise is producing. An athlete at alpha1 = 0.80 (well below VT1) is accumulating almost no stress. At alpha1 = 0.50 (VT2), the stress per minute is dramatically higher. The relationship is not linear — the metabolic cost of exercise rises steeply as you approach and cross your thresholds.
+
+AlphaZone captures this with what I call Alpha-TRIMP (Training Impulse). The idea borrows from Banister's original TRIMP concept but replaces the heart rate fraction with an alpha1-based exponential:
+
+```
+load_coefficient = exp(k × (VT1_reference − alpha1))
+```
+
+When alpha1 is at your VT1 reference (say 0.78), the coefficient is 1.0 — baseline training stress. Drop below VT1 to alpha1 = 0.60, and the coefficient rises to ~1.4. Push to VT2 territory at alpha1 = 0.40, and it rises to ~2.1. The exponential means that each step deeper below threshold costs disproportionately more — which matches the physiology. Glycolytic contribution, lactate accumulation, and neural fatigue all scale nonlinearly with intensity.
+
+The per-beat load is then:
+
+```
+load_per_beat = (RR_interval / 60000) × load_coefficient × readiness_factor
+```
+
+where `readiness_factor` adjusts for your current recovery state. Summed over a session, this gives you a training load number that actually reflects the autonomic cost of the workout — not just "time in zone" but "time in zone weighted by how deep below threshold you were at each moment." Two sessions at the same average power can produce very different Alpha-TRIMP scores if one involved steady Zone 2 and the other had repeated VT1 crossings.
 
 I wrote 1200+ automated tests, including synthetic artefact injection — I generate fake ectopic beats, simulate BLE dropouts, inject baseline wander, and verify the pipeline handles all of it without falling over. That test suite is where most of the confidence comes from. The math is proven. The question was always whether the math survives contact with real-world data from a chest strap on a bumpy road.
 
