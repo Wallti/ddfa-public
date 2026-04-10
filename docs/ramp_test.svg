@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="550" viewBox="0 0 900 550">
+  <defs>
+    <style>
+      text { font-family: 'Helvetica Neue', Arial, sans-serif; fill: #e2e8f0; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="#0f1117"/>
+
+  <!-- Plot area: x=90..820, y=55..460 -->
+  <!-- Total width: 730px for 50 min → 14.6px/min -->
+  <!-- x(t) = 90 + t * 14.6 -->
+
+  <!-- Vertical gridlines every 5 min -->
+  <line x1="163" y1="55" x2="163" y2="460" stroke="#1e2330" stroke-width="1"/>
+  <line x1="236" y1="55" x2="236" y2="460" stroke="#1e2330" stroke-width="1"/>
+  <line x1="309" y1="55" x2="309" y2="460" stroke="#1e2330" stroke-width="1"/>
+  <line x1="382" y1="55" x2="382" y2="460" stroke="#1e2330" stroke-width="1"/>
+  <line x1="455" y1="55" x2="455" y2="460" stroke="#1e2330" stroke-width="1"/>
+  <line x1="528" y1="55" x2="528" y2="460" stroke="#1e2330" stroke-width="1"/>
+  <line x1="601" y1="55" x2="601" y2="460" stroke="#1e2330" stroke-width="1"/>
+  <line x1="674" y1="55" x2="674" y2="460" stroke="#1e2330" stroke-width="1"/>
+  <line x1="747" y1="55" x2="747" y2="460" stroke="#1e2330" stroke-width="1"/>
+  <line x1="820" y1="55" x2="820" y2="460" stroke="#1e2330" stroke-width="1"/>
+
+  <!-- Horizontal gridlines -->
+  <line x1="90" y1="109" x2="820" y2="109" stroke="#1e2330" stroke-width="1"/>
+  <line x1="90" y1="163" x2="820" y2="163" stroke="#1e2330" stroke-width="1"/>
+  <line x1="90" y1="217" x2="820" y2="217" stroke="#1e2330" stroke-width="1"/>
+  <line x1="90" y1="271" x2="820" y2="271" stroke="#1e2330" stroke-width="1"/>
+  <line x1="90" y1="325" x2="820" y2="325" stroke="#1e2330" stroke-width="1"/>
+  <line x1="90" y1="379" x2="820" y2="379" stroke="#1e2330" stroke-width="1"/>
+  <line x1="90" y1="433" x2="820" y2="433" stroke="#1e2330" stroke-width="1"/>
+
+  <!-- Axes -->
+  <line x1="90" y1="460" x2="820" y2="460" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="90" y1="460" x2="90" y2="55" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="820" y1="460" x2="820" y2="55" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- X axis labels -->
+  <text x="90" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">0</text>
+  <text x="163" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">5</text>
+  <text x="236" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">10</text>
+  <text x="309" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">15</text>
+  <text x="382" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">20</text>
+  <text x="455" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">25</text>
+  <text x="528" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">30</text>
+  <text x="601" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">35</text>
+  <text x="674" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">40</text>
+  <text x="747" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">45</text>
+  <text x="820" y="480" font-size="11" fill="#e2e8f0" text-anchor="middle">50</text>
+  <text x="455" y="505" font-size="13" fill="#e2e8f0" text-anchor="middle">Time (min)</text>
+
+  <!-- Y axis LEFT labels -->
+  <!-- Power 0-500W maps to y=460..55 → scale: (460-55)/500 = 0.81 per W → y = 460 - W*0.81 -->
+  <!-- HR 80-200bpm also shown: HR maps linearly within same visual range -->
+  <text x="30" y="260" font-size="13" fill="#06b6d4" text-anchor="middle" transform="rotate(-90,30,260)">Power (W)</text>
+  <text x="58" y="260" font-size="12" fill="#ec4899" text-anchor="middle" transform="rotate(-90,58,260)">HR (bpm)</text>
+
+  <!-- Power tick labels (left edge) -->
+  <text x="82" y="464" font-size="10" fill="#06b6d4" text-anchor="end">0</text>
+  <text x="82" y="383" font-size="10" fill="#06b6d4" text-anchor="end">100</text>
+  <text x="82" y="302" font-size="10" fill="#06b6d4" text-anchor="end">200</text>
+  <text x="82" y="221" font-size="10" fill="#06b6d4" text-anchor="end">300</text>
+  <text x="82" y="140" font-size="10" fill="#06b6d4" text-anchor="end">400</text>
+  <text x="82" y="59" font-size="10" fill="#06b6d4" text-anchor="end">500</text>
+
+  <!-- Y axis RIGHT label: Alpha1 0.0 to 2.0 -->
+  <!-- Alpha maps: 0.0=y460, 2.0=y55 → y = 460 - alpha*202.5 -->
+  <text x="870" y="260" font-size="13" fill="#84cc16" text-anchor="middle" transform="rotate(90,870,260)">DFA Alpha1</text>
+
+  <!-- Alpha1 tick labels (right edge) -->
+  <text x="828" y="464" font-size="10" fill="#84cc16" text-anchor="start">0.0</text>
+  <text x="828" y="363" font-size="10" fill="#84cc16" text-anchor="start">0.5</text>
+  <text x="828" y="262" font-size="10" fill="#84cc16" text-anchor="start">1.0</text>
+  <text x="828" y="161" font-size="10" fill="#84cc16" text-anchor="start">1.5</text>
+  <text x="828" y="59" font-size="10" fill="#84cc16" text-anchor="start">2.0</text>
+
+  <!-- Power staircase (cyan) -->
+  <!-- x(t) = 90 + t*14.6, y(P) = 460 - P*0.81 -->
+  <!-- 0-5: 120W → y=362.8 -->
+  <!-- 5-10: 155W → y=334.45 -->
+  <!-- 10-15: 190W → y=306.1 -->
+  <!-- 15-20: 225W → y=277.75 -->
+  <!-- 20-25: 260W → y=249.4 -->
+  <!-- 25-30: 295W → y=221.05 -->
+  <!-- 30-35: 325W → y=196.75 -->
+  <!-- 35-40: 356W → y=171.64 -->
+  <!-- 40-45: 380W → y=152.2 -->
+  <!-- 45-47: 380W → y=152.2 -->
+  <path d="M 90,362.8 L 163,362.8
+           L 163,334.5 L 236,334.5
+           L 236,306.1 L 309,306.1
+           L 309,277.8 L 382,277.8
+           L 382,249.4 L 455,249.4
+           L 455,221.1 L 528,221.1
+           L 528,196.8 L 601,196.8
+           L 601,171.6 L 674,171.6
+           L 674,152.2 L 747,152.2
+           L 747,152.2 L 776.2,152.2"
+        fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- HR curve (magenta/pink, smooth) -->
+  <!-- y(HR) mapped: HR 80=y460, HR 200=y55 → y = 460 - (HR-80)*3.375 -->
+  <!-- Points: (2.5,100→y=392.5) (7.5,112→y=352) (12.5,124→y=311.5) (17.5,136→y=271) (22.5,150→y=223.75) (27.5,162→y=183.25) (32.5,170→y=156.25) (37.5,179→y=125.88) (42.5,186→y=102.25) (46,186→y=102.25) -->
+  <path d="M 126.5,392.5 C 163,375 195,355 199.5,352
+           C 220,335 260,320 272.5,311.5
+           C 300,290 330,280 345.5,271
+           C 365,255 400,235 418.5,223.8
+           C 440,210 470,195 491.5,183.3
+           C 520,168 550,160 564.5,156.3
+           C 590,145 625,130 637.5,125.9
+           C 660,115 700,106 710.5,102.3
+           C 730,98 760,96 761.6,102.3"
+        fill="none" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Alpha1 curve (lime green, sigmoid descent) -->
+  <!-- y(a) = 460 - a*202.5 -->
+  <!-- Points: (2.5,1.60→y=136) (7.5,1.45→y=166.4) (12.5,1.30→y=196.8) (17.5,1.10→y=237.3) (22.5,0.92→y=273.7) (27.5,0.80→y=298) (32.5,0.68→y=322.3) (37.5,0.55→y=348.6) (42.5,0.35→y=389.1) (46,0.20→y=419.5) -->
+  <path d="M 126.5,136 C 155,150 175,160 199.5,166.4
+           C 225,175 250,188 272.5,196.8
+           C 300,212 325,228 345.5,237.3
+           C 370,252 395,265 418.5,273.7
+           C 440,282 465,292 491.5,298
+           C 515,308 540,316 564.5,322.3
+           C 590,333 615,342 637.5,348.6
+           C 660,362 685,378 710.5,389.1
+           C 730,400 750,412 761.6,419.5"
+        fill="none" stroke="#84cc16" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Alpha1 data points -->
+  <circle cx="126.5" cy="136" r="3.5" fill="#84cc16"/>
+  <circle cx="199.5" cy="166.4" r="3.5" fill="#84cc16"/>
+  <circle cx="272.5" cy="196.8" r="3.5" fill="#84cc16"/>
+  <circle cx="345.5" cy="237.3" r="3.5" fill="#84cc16"/>
+  <circle cx="418.5" cy="273.7" r="3.5" fill="#84cc16"/>
+  <circle cx="491.5" cy="298" r="3.5" fill="#84cc16"/>
+  <circle cx="564.5" cy="322.3" r="3.5" fill="#84cc16"/>
+  <circle cx="637.5" cy="348.6" r="3.5" fill="#84cc16"/>
+  <circle cx="710.5" cy="389.1" r="3.5" fill="#84cc16"/>
+  <circle cx="761.6" cy="419.5" r="3.5" fill="#84cc16"/>
+
+  <!-- Horizontal dashed line: alpha1 = 0.75 → y = 460 - 0.75*202.5 = 308.1 -->
+  <line x1="90" y1="308.1" x2="820" y2="308.1" stroke="#64748b" stroke-width="1" stroke-dasharray="6,4" opacity="0.6"/>
+  <text x="95" y="303" font-size="10" fill="#94a3b8" opacity="0.8">α₁ = 0.75</text>
+
+  <!-- Horizontal dashed line: alpha1 = 0.50 → y = 460 - 0.50*202.5 = 358.75 -->
+  <line x1="90" y1="358.8" x2="820" y2="358.8" stroke="#64748b" stroke-width="1" stroke-dasharray="6,4" opacity="0.6"/>
+  <text x="95" y="353.5" font-size="10" fill="#94a3b8" opacity="0.8">α₁ = 0.50</text>
+
+  <!-- VT1 vertical line at t=27.5 → x = 90 + 27.5*14.6 = 491.5 -->
+  <line x1="491.5" y1="55" x2="491.5" y2="460" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="8,5" opacity="0.8"/>
+  <text x="491.5" y="80" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">VT1</text>
+  <rect x="429" y="86" width="125" height="18" rx="3" fill="#0f1117" opacity="0.85"/>
+  <text x="491.5" y="100" font-size="10" fill="#e2e8f0" text-anchor="middle">295W / 162bpm / α₁=0.80</text>
+
+  <!-- VT2 vertical line at t=37.5 → x = 90 + 37.5*14.6 = 637.5 -->
+  <line x1="637.5" y1="55" x2="637.5" y2="460" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="8,5" opacity="0.8"/>
+  <text x="637.5" y="80" font-size="12" fill="#ef4444" text-anchor="middle" font-weight="700">VT2</text>
+  <rect x="575" y="86" width="125" height="18" rx="3" fill="#0f1117" opacity="0.85"/>
+  <text x="637.5" y="100" font-size="10" fill="#e2e8f0" text-anchor="middle">356W / 179bpm / α₁=0.55</text>
+
+  <!-- Legend box (top-right) -->
+  <rect x="640" y="118" width="170" height="80" rx="4" fill="#0f1117" stroke="#2d3748" stroke-width="1" opacity="0.92"/>
+  <line x1="652" y1="140" x2="682" y2="140" stroke="#06b6d4" stroke-width="2.5"/>
+  <text x="690" y="144" font-size="12" fill="#e2e8f0">Power (W)</text>
+  <line x1="652" y1="160" x2="682" y2="160" stroke="#ec4899" stroke-width="2.5"/>
+  <text x="690" y="164" font-size="12" fill="#e2e8f0">Heart Rate (bpm)</text>
+  <circle cx="667" cy="180" r="3.5" fill="#84cc16"/>
+  <line x1="652" y1="180" x2="682" y2="180" stroke="#84cc16" stroke-width="2.5"/>
+  <text x="690" y="184" font-size="12" fill="#e2e8f0">DFA Alpha1</text>
+
+  <!-- Title -->
+  <text x="450" y="32" font-size="18" fill="#e2e8f0" text-anchor="middle" font-weight="700">Ramp Test — Power, Heart Rate &amp; DFA Alpha1</text>
+</svg>
