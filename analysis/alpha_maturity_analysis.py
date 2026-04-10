@@ -2,7 +2,7 @@
 """
 Alpha Maturity Stage Analysis
 ==============================
-Analyses the alpha maturity progression (warmup → transition → mature) in DDFA
+Analyses the alpha maturity progression (warmup → transition → mature) in AlphaZone
 session data and quantifies alpha drift across stages.
 
 Expected CSV columns:

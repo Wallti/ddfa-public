@@ -1,13 +1,13 @@
-# DDFA — Real-Time Threshold Detection for Endurance Athletes
+# AlphaZone — Real-Time Threshold Detection for Endurance Athletes
 
-**DFA is the science. DDFA is what makes it usable.**
+**DFA is the science. AlphaZone is what makes it usable.**
 
-DDFA is an iOS app that detects both ventilatory thresholds (VT1 and VT2) in real time using DFA alpha1 from a standard chest strap. No lab visit, no lactate strips, no guessing.
+AlphaZone is an iOS app that detects both ventilatory thresholds (VT1 and VT2) in real time using DFA alpha1 from a standard chest strap. No lab visit, no lactate strips, no guessing.
 
 ## What it does
 
 - **Live VT1 and VT2 detection** from beat-to-beat RR intervals during exercise
-- **Dual-engine DFA**: fast engine (sf=1, 200-beat buffer) for responsive VT1 detection + deep engine (sf=5, up to 1280 beats) for stable autonomic tracking
+- **Dual-engine**: fast engine (sf=1, 200-beat buffer) for responsive VT1 detection + deep engine (sf=5, up to 1280 beats) for stable autonomic tracking
 - **Per-session threshold recalibration** — no fixed 0.75/0.50 constants; your threshold is measured fresh every workout
 - **TriGate validation** — VT1 fires only when power, HR, and alpha1 all converge within 10%
 - **IntensityGauge** — 4-zone colour gauge (green/yellow/orange/red) with 10s EMA smoothing
@@ -46,7 +46,7 @@ RR Preprocessing ──→ Ectopic detection, artefact rejection, interpolation
 
 This is the public-facing companion to the closed-source iOS app. It contains:
 
-- **[docs/dfa_alpha1_explained.md](docs/dfa_alpha1_explained.md)** — Full technical article explaining the science behind DFA alpha1 and how DDFA extends it into a real-time product
+- **[docs/dfa_alpha1_explained.md](docs/dfa_alpha1_explained.md)** — Full technical article explaining the science behind DFA alpha1 and how AlphaZone extends it into a real-time product
 - **[analysis/alpha_maturity_analysis.py](analysis/alpha_maturity_analysis.py)** — Python script analysing alpha maturity stages (warmup/transition/mature) and alpha drift across a session
 - **[examples/sample_session.csv](examples/sample_session.csv)** — Anonymised beat-by-beat data from a real workout session (timestamps zeroed, power/HR offset)
 - **[docs/references.md](docs/references.md)** — Key papers behind the DFA alpha1 methodology
@@ -82,7 +82,7 @@ DFA alpha1 measures the fractal complexity of beat-to-beat heart rate variation.
 
 This has been validated against gas exchange (ventilatory thresholds), not lactate — the correlation between HRVT and VT1 is r ~0.95 across multiple studies.
 
-DDFA's contribution is making this work in real time on a phone: noise handling, dual-engine stabilisation, personalised thresholds, TriGate validation, and cross-session learning.
+AlphaZone's contribution is making this work in real time on a phone: noise handling, dual-engine stabilisation, personalised thresholds, TriGate validation, and cross-session learning.
 
 ## Key references
 
@@ -106,7 +106,7 @@ Active development. Currently in Sprint 87.
 
 ---
 
-**Walter Vath** — endurance athlete, developer. DDFA is available for iOS.
+**Walter Vath** — endurance athlete, developer. AlphaZone is available for iOS.
 
 ## License
 

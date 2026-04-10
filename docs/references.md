@@ -1,6 +1,6 @@
 # References
 
-The DFA alpha1 methodology that DDFA builds on is grounded in peer-reviewed research.
+The DFA alpha1 methodology that AlphaZone builds on is grounded in peer-reviewed research.
 
 ## Core papers
 
