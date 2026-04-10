@@ -68,7 +68,7 @@
 
   <!-- Y axis RIGHT label: Alpha1 0.0 to 2.0 -->
   <!-- Alpha maps: 0.0=y460, 2.0=y55 → y = 460 - alpha*202.5 -->
-  <text x="870" y="260" font-size="13" fill="#84cc16" text-anchor="middle" transform="rotate(90,870,260)">DFA Alpha1</text>
+  <text x="870" y="260" font-size="13" fill="#84cc16" text-anchor="middle" transform="rotate(90,870,260)">α₁ (stabilised)</text>
 
   <!-- Alpha1 tick labels (right edge) -->
   <text x="828" y="464" font-size="10" fill="#84cc16" text-anchor="start">0.0</text>
@@ -169,8 +169,8 @@
   <text x="690" y="164" font-size="12" fill="#e2e8f0">Heart Rate (bpm)</text>
   <circle cx="667" cy="180" r="3.5" fill="#84cc16"/>
   <line x1="652" y1="180" x2="682" y2="180" stroke="#84cc16" stroke-width="2.5"/>
-  <text x="690" y="184" font-size="12" fill="#e2e8f0">DFA Alpha1</text>
+  <text x="690" y="184" font-size="12" fill="#e2e8f0">α₁ (stabilised)</text>
 
   <!-- Title -->
-  <text x="450" y="32" font-size="18" fill="#e2e8f0" text-anchor="middle" font-weight="700">Ramp Test — Power, Heart Rate &amp; DFA Alpha1</text>
+  <text x="450" y="32" font-size="18" fill="#e2e8f0" text-anchor="middle" font-weight="700">Ramp Test — Power, Heart Rate &amp; α₁ (stabilised)</text>
 </svg>
