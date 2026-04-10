@@ -24,6 +24,44 @@ I wanted to stop guessing.
 
 ---
 
+## What your thresholds actually are — and how to find them
+
+Before I explain what AlphaZone does, it's worth understanding what it's measuring.
+
+Your body has two critical intensity boundaries. The first — the aerobic threshold, or VT1 — is the point where your breathing rate first increases noticeably. Below it, you can talk comfortably, your muscles run primarily on fat oxidation, and you can sustain the effort for hours. Above it, carbohydrate metabolism increases, lactate begins to accumulate faster, and your autonomic nervous system shifts from parasympathetic (rest-and-digest) to sympathetic (fight-or-flight) dominance.
+
+The second — the anaerobic threshold, or VT2 — is where things get serious. Above VT2, lactate production outpaces clearance, your breathing becomes laboured, and you're on a countdown. Most athletes can sustain efforts above VT2 for 20-40 minutes at best.
+
+![Three-Zone Intensity Model](docs/zone_model.svg)
+
+These two thresholds define three training zones. Zone 1 (below VT1) is your aerobic base — the bread and butter of endurance training. Zone 2 (between VT1 and VT2) is the threshold zone — useful for tempo work but dangerous to accidentally drift into during easy rides. Zone 3 (above VT2) is high-intensity territory — intervals, VO2max work, race pace.
+
+The gold standard for finding these thresholds is a lab test with gas exchange analysis — you ride a stationary bike while wearing a mask that measures your oxygen consumption and CO2 output, and a technician identifies the ventilatory breakpoints. Accurate, but expensive (€150-300), time-consuming, and a snapshot of one day. Repeat it a month later and the numbers might be different.
+
+### Heart rate variability — the hidden signal
+
+Here's where it gets interesting. Your heart doesn't beat like a metronome. Even at rest, the time between consecutive beats varies by tens of milliseconds. This variation — heart rate variability, or HRV — isn't noise. It's a direct readout of your autonomic nervous system.
+
+When your parasympathetic system is active (rest, easy exercise), it modulates each heartbeat individually. The result is a complex, irregular pattern of RR intervals — high variability, high complexity. When sympathetic drive takes over (hard exercise, stress), that beat-to-beat modulation disappears. The intervals become more uniform, more predictable. Less complex.
+
+DFA alpha1 quantifies this complexity. It's the scaling exponent from Detrended Fluctuation Analysis — a method that measures how the statistical properties of your RR intervals change across different timescales. An alpha1 above ~0.75 means your autonomic system is still actively modulating your heart — you're below VT1. Drop below ~0.75, and parasympathetic withdrawal has begun — you've crossed VT1. Drop below ~0.50, and you're above VT2.
+
+### What a ramp test looks like
+
+The relationship becomes obvious when you do a step test — start easy, increase the power every five minutes, and keep going until you can't.
+
+![Ramp Test — Power, Heart Rate & α₁ (stabilised)](docs/ramp_test.svg)
+
+Power rises in steps (cyan). Heart rate follows with a smooth upward curve (pink). And alpha1 traces a characteristic sigmoid descent (green) — high and stable during the easy stages, then dropping through a steep transition zone, then flattening out at low values as you approach exhaustion.
+
+The two threshold crossings are clearly visible. At VT1 (295W, 162 bpm in this example), alpha1 passes through the personal aerobic threshold. At VT2 (356W, 179 bpm), it crosses the anaerobic threshold. The same chest strap that your watch uses to show heart rate contains all of this information — you just need the right math to extract it.
+
+The key insight is that you don't need to be in a lab. You don't need a mask or a blood sample. A $60 Polar chest strap transmitting RR intervals over Bluetooth gives you the same signal. The question is whether you can process it reliably, in real time, on a phone, while riding on a road with all the noise that entails.
+
+That's the problem I set out to solve.
+
+---
+
 ## The signal your watch is throwing away
 
 Your chest strap transmits the exact millisecond timing between each heartbeat. It's called the RR interval. Your watch takes those intervals, calculates a heart rate from them, and throws the rest away.
